@@ -14,6 +14,11 @@ jobs:
     - name: Checkout Xana
       uses: actions/checkout@v1
 
+    - name: Install docs dependencies
+      run: |
+        sudo apt install pandoc
+        pip install -e ".[docs]"
+
     - name: Checkout Xana gh-docs branch
       uses: actions/checkout@v1
       with:
