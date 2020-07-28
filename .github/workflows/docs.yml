@@ -17,6 +17,8 @@ jobs:
     - name: Install docs dependencies
       run: |
         sudo apt install pandoc
+        pip install --upgrade pip
+        pip install numpy
         pip install -e ".[docs]"
 
     - name: Checkout Xana gh-docs branch
