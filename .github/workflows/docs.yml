@@ -14,6 +14,14 @@ jobs:
     - name: Checkout Xana
       uses: actions/checkout@v1
 
+    - name: troubleshooting.................
+      run: |
+        pwd
+        ls
+        echo "!!!!!!!!!!!!!!!!!!"
+        echo $(ls)
+        echo $(pwd)
+
     - uses: actions/setup-python@v2
       with:
         python-version: '3.8'
@@ -33,9 +41,29 @@ jobs:
         persist-credentials: false
         fetch-depth: 0
 
-    - uses: ammaraskar/sphinx-action@8b4f60114d7fd1faeba1a712269168508d4750d2
-      with:
-        docs-folder: "docs/"
+    - name: troubleshooting
+      run: |
+        pwd
+        ls
+        echo "!!!!!!!!!!!!!!!!!!"
+        echo $(ls)
+        echo $(pwd)
+        cd ..
+        echo "CD up for some reason...?"
+        pwd
+        ls
+        echo "!!!!!!!!!!!!!!!!!!"
+        echo $(ls)
+        echo $(pwd)
+        cd ..
+
+    - name: Build docs
+      run: |
+        pwd
+        ls
+        pushd docs
+        make html -e
+        popd
 
     - name: Commit documentation changes
       run: |
