@@ -51,6 +51,14 @@ setup(
             "pytest-cov",
             "nbval",
         ],
+        "docs": [
+            "sphinx<3",
+            "sphinx_rtd_theme",
+            "sphinxcontrib-napoleon",
+            "nbsphinx",
+            "m2r",
+            "pandoc",
+        ],
     },
     classifiers=[
         'Development Status :: 3 - Alpha',
