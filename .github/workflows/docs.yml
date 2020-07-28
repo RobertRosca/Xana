@@ -6,32 +6,20 @@ on:
     tags: '*'
     
 jobs:
-  build:
+  docs:
 
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Xana
       uses: actions/checkout@v1
+      with:
+        path: Xana
 
-    - name: troubleshooting.................
+    - name: troubleshooting 1
       run: |
         pwd
         ls
-        echo "!!!!!!!!!!!!!!!!!!"
-        echo $(ls)
-        echo $(pwd)
-
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
-
-    - name: Install docs dependencies
-      run: |
-        sudo apt install pandoc
-        pip install --upgrade pip
-        pip install numpy
-        pip install -e ".[docs]"
 
     - name: Checkout Xana gh-docs branch
       uses: actions/checkout@v1
@@ -41,40 +29,53 @@ jobs:
         persist-credentials: false
         fetch-depth: 0
 
-    - name: troubleshooting
+    - name: troubleshooting 2
       run: |
         pwd
         ls
-        echo "!!!!!!!!!!!!!!!!!!"
-        echo $(ls)
-        echo $(pwd)
         cd ..
-        echo "CD up for some reason...?"
         pwd
         ls
-        echo "!!!!!!!!!!!!!!!!!!"
-        echo $(ls)
-        echo $(pwd)
         cd ..
+        pwd
+        ls
+        echo "---"
+        echo $GITHUB_WORKSPACE
+        ls $GITHUB_WORKSPACE
+
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install docs dependencies
+      run: |
+        sudo apt install pandoc
+        pip install --upgrade pip
+        pushd Xana
+        pip install numpy
+        pip install -e ".[docs]"
+        popd
 
     - name: Build docs
       run: |
         pwd
         ls
-        pushd docs
+        pushd Xana/docs
         make html -e
         popd
 
     - name: Commit documentation changes
       run: |
-        cp -r docs/_build/html/* gh-pages/$GITHUB_REF/
-        cd gh-pages
+        mkdir gh-pages/$GITHUB_REF/
+        cp -r Xana/docs/_build/html/* gh-pages/$GITHUB_REF/
+        pushd gh-pages
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add .
         git commit -m "Update documentation for $GITHUB_REF" -a || true
         # The above command will fail if no changes were present, so we ignore
         # that.
+        popd
 
     - name: Push changes
       uses: ad-m/github-push-action@40bf560936a8022e68a3c00e7d2abefaf01305a6
